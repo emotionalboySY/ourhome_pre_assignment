@@ -25,9 +25,9 @@
 <br>
 
 ## Flutter를 선택한 이유
-- 크로스플랫폼이 가능한 유명한 프레임워크이며, 추후 더욱 다양한 회사에서 Flutter를 적용할 가능성이 높아지고 있기 때문입니다.
+- 크로스플랫폼이 가능한 유명한 프레임워크이며, 추후 더욱 다양한 회사에서 `Flutter`를 적용할 가능성이 높아지고 있기 때문입니다.
 - 정해진 기한 안에 요구하는 사항을 모두 구현하기 위해서입니다.
-- 가장 자신 있는 프레임워크가 Flutter입니다.
+- 가장 자신 있는 프레임워크가 `Flutter`입니다.
 
 <br>
 
@@ -61,7 +61,7 @@
       });
     }
     ```
-    - 이 데이터 모델을 활용하여 각 GridView에 표시될 항목을 모듈화 하여 출력하도록 구현하였습니다.
+    - 이 데이터 모델을 활용하여 각 `GridView`에 표시될 항목을 모듈화 하여 출력하도록 구현하였습니다.
       ```dart
       GridView.builder(
         padding: const EdgeInsets.only(top: 10.0),
@@ -79,6 +79,78 @@
         },
       )
       ```
+  - 각 상품 항목의 **[장바구니]** 버튼을 누르면 관련 팝업창이 뜨며, 처리 여부를 결정할 수 있습니다.
+    <img src="https://github.com/emotionalboySY/ourhome_pre_assignment/blob/master/%5Bnot_for_project%5Dimages/%EC%9E%A5%EB%B0%94%EA%B5%AC%EB%8B%88%20%EC%B6%94%EA%B0%80%20%ED%8C%9D%EC%97%85.png?raw=true" />
+  
+    <img src="https://github.com/emotionalboySY/ourhome_pre_assignment/blob/master/%5Bnot_for_project%5Dimages/%EC%9E%A5%EB%B0%94%EA%B5%AC%EB%8B%88%20%EC%A7%80%EC%9A%B0%EA%B8%B0%20%ED%8C%9D%EC%97%85.png?raw=true"/>
+    
+    - 팝업창은 `GetxController`의 `Get.dialog`를 활용하였습니다.
+    ```dart
+    await Get.dialog(
+      AlertDialog(
+        elevation: 20.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0.0),
+        ),
+        alignment: Alignment.topCenter,
+        content: const Text(
+            "이미 장바구니에 상품이 추가되어 있습니다. 장바구니에 담긴 상품의 갯수를 늘릴까요?"
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              shoppingBagController.removeProduct(products[index]);
+              Get.back();
+              await showResultDialog(contentString: "장바구니에서 상품을 삭제했습니다.");
+            },
+            child: const Text(
+              "장바구니에서 지우기",
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              "취소",
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          TextButton(
+            onPressed: () async {
+              shoppingBagController.increaseProductCount(products[index]);
+              Get.back();
+              await showResultDialog(contentString: "장바구니에 담긴 상품의 갯수를 늘렸습니다.");
+            },
+            child: const Text(
+              "추가",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        ],
+        shadowColor: Colors.black,
+        surfaceTintColor: Colors.white,
+      ),
+      barrierColor: Colors.transparent,
+      barrierDismissible: false,
+      transitionDuration: Duration.zero,
+    );
+    ```
+    
 
 <br>
     
@@ -87,7 +159,7 @@
 <br>
 
 - 주요 로직
-  - 장바구니에 포함된 상품의 갯수 조정, 삭제 등의 기능을 구현하기 위해 GetxController 사용했습니다.
+  - 장바구니에 포함된 상품의 갯수 조정, 삭제 등의 기능을 구현하기 위해 `GetxController`를 사용했습니다.
     ```dart
     class ShoppingBagController extends GetxController {
       static ShoppingBagController get to => Get.find();
@@ -97,7 +169,7 @@
       RxInt deliveryFee = 0.obs;
     }
     ```
-    - Rx 변수를 사용하여 stless한 위젯에서도 GetxController를 통해 실시간 상태 업데이트가 가능하도록 설정했습니다.
+    - `Rx`변수를 사용하여 `stless`한 위젯에서도 `GetxController`를 통해 실시간 상태 업데이트가 가능하도록 설정했습니다.
 
   - 장바구니 정보가 변경될 때마다 총 구매 가격 및 배송비, 결제 금액이 재계산되도록 구현했습니다.
     ```dart
